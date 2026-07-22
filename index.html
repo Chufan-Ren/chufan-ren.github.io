@@ -457,6 +457,34 @@
             border-top: none;
         }
 
+        /* ===== Figures ===== */
+        .figure-wrap {
+            margin: 16px 0;
+            text-align: center;
+        }
+        .figure-wrap img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+        }
+        .figure-wrap .figcaption {
+            font-size: .8rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+            line-height: 1.5;
+            text-align: left;
+            padding: 0 4px;
+        }
+        .figure-grid {
+            display: grid;
+            gap: 24px;
+        }
+        @media (min-width: 640px) {
+            .figure-grid-2 { grid-template-columns: 1fr 1fr; }
+        }
+
         /* ===== Responsive ===== */
         @media (max-width: 640px) {
             .hero { padding: 64px 0 40px; }
@@ -615,6 +643,23 @@
                         <li><strong>Feature encoding:</strong> Cross-scale self-attention (CSA) over multi-scale groupings</li>
                         <li><strong>Loss optimization:</strong> Hybrid loss combining Dice, Focal, and Cross-Entropy terms</li>
                     </ol>
+                    <div class="figure-grid figure-grid-2">
+                        <div class="figure-wrap">
+                            <a href="assets/figures/fig1-workflow.png" target="_blank">
+                                <img src="assets/figures/fig1-workflow.png" alt="Figure 1: Workflow of the proposed method" loading="lazy">
+                            </a>
+                            <div class="figcaption"><strong>Figure 1.</strong> Workflow of the proposed method. The five overlaid images represent the feature vector composed of RGB, surface normals, curvature, and roughness for each point.</div>
+                        </div>
+                        <div class="figure-wrap">
+                            <a href="assets/figures/fig2-architecture.png" target="_blank">
+                                <img src="assets/figures/fig2-architecture.png" alt="Figure 2: SedCSA-Net architecture" loading="lazy">
+                            </a>
+                            <div class="figcaption"><strong>Figure 2.</strong> SedCSA-Net architecture — an enhanced PointNet++ with cross-scale self-attention (CSA) and hybrid loss optimization.</div>
+                        </div>
+                    </div>
+                    <p style="font-size: .8rem; color: var(--text-muted); text-align: right; margin-top: 4px;">
+                        <em>Figures reproduced from Sensors (MDPI), CC BY 4.0.</em>
+                    </p>
                 </div>
 
                 <div class="detail-section">
@@ -732,6 +777,40 @@
                 </div>
 
                 <div class="detail-section">
+                    <h4>Segmentation Results</h4>
+                    <p style="font-size: .9rem; color: var(--text-soft);">
+                        Qualitative comparison of segmentation outputs across all evaluated methods.
+                        SedCSA-Net produces the closest match to ground-truth annotations, accurately
+                        recovering continuous outcrop belts along the stratum strike while preserving
+                        sharp boundaries and identifying small, fragmented outcrops.
+                    </p>
+                    <div class="figure-wrap">
+                        <a href="assets/figures/fig8-segmentation.png" target="_blank">
+                            <img src="assets/figures/fig8-segmentation.png" alt="Figure 8: Comparison of segmentation results" loading="lazy">
+                        </a>
+                        <div class="figcaption">
+                            <strong>Figure 8.</strong> Comparison of segmentation results. (a) Original point cloud;
+                            (b) ground-truth annotation; (c) DBSCAN; (d) Random Forest; (e) PointNet;
+                            (f) PointNet++; (g) SedCSA-Net (proposed). SedCSA-Net best matches the ground truth,
+                            capturing both the macroscopic band-like outcrop distribution and fine boundary details.
+                        </div>
+                    </div>
+                    <div class="figure-wrap">
+                        <a href="assets/figures/fig9-robustness.png" target="_blank">
+                            <img src="assets/figures/fig9-robustness.png" alt="Figure 9: Segmentation robustness in challenging regions" loading="lazy">
+                        </a>
+                        <div class="figcaption">
+                            <strong>Figure 9.</strong> Robustness analysis — segmentation performance in shadowed areas
+                            and geometric-void regions introduced by SfM reconstruction artifacts.
+                            SedCSA-Net maintains consistent predictions under these challenging conditions.
+                        </div>
+                    </div>
+                    <p style="font-size: .8rem; color: var(--text-muted); text-align: right; margin-top: 4px;">
+                        <em>Figures reproduced from Sensors (MDPI), CC BY 4.0.</em>
+                    </p>
+                </div>
+
+                <div class="detail-section">
                     <h4>Geological Validation — Attitude Measurements</h4>
                     <p style="margin-bottom: 12px; font-size: .9rem; color: var(--text-soft);">
                         Dip direction (°) and dip angle (°) of fitted sedimentary layer boundaries,
@@ -761,6 +840,20 @@
                             </tfoot>
                         </table>
                     </div>
+                    <div class="figure-wrap">
+                        <a href="assets/figures/fig10-boundaries.png" target="_blank">
+                            <img src="assets/figures/fig10-boundaries.png" alt="Figure 10: Comparison of fitted sedimentary layer boundaries" loading="lazy">
+                        </a>
+                        <div class="figcaption">
+                            <strong>Figure 10.</strong> Comparison of fitted sedimentary layer boundaries.
+                            (a) Original point cloud; (b) manually annotated reference fitting surface;
+                            (c) fitting surface derived from SedCSA-Net segmentation results — closely matching
+                            the reference in both stratum interface position and overall spatial distribution.
+                        </div>
+                    </div>
+                    <p style="font-size: .8rem; color: var(--text-muted); text-align: right; margin-top: 4px;">
+                        <em>Figure reproduced from Sensors (MDPI), CC BY 4.0.</em>
+                    </p>
                 </div>
 
                 <div class="detail-section">
