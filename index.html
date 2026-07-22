@@ -405,6 +405,58 @@
             font-size: .8rem;
         }
 
+        /* ===== Data Tables ===== */
+        .data-table-wrap {
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .85rem;
+            font-family: "SF Mono", "Cascadia Code", monospace;
+            background: var(--surface);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .data-table thead {
+            background: var(--accent-bg);
+        }
+        .data-table th {
+            padding: 10px 14px;
+            font-weight: 600;
+            color: var(--text);
+            text-align: center;
+            font-size: .8rem;
+            white-space: nowrap;
+        }
+        .data-table td {
+            padding: 8px 14px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            color: var(--text-soft);
+        }
+        .data-table tbody tr:hover {
+            background: var(--accent-bg);
+        }
+        .data-table .highlight {
+            background: var(--accent);
+            color: #fff;
+            font-weight: 700;
+            border-radius: 4px;
+        }
+        .data-table .check {
+            color: var(--accent);
+            font-weight: 700;
+        }
+        .data-table .caption {
+            font-size: .8rem;
+            color: var(--text-muted);
+            text-align: left;
+            padding: 6px 14px;
+            border-top: none;
+        }
+
         /* ===== Responsive ===== */
         @media (max-width: 640px) {
             .hero { padding: 64px 0 40px; }
@@ -535,6 +587,37 @@
                 </div>
 
                 <div class="detail-section">
+                    <h4>Methodology Overview</h4>
+                    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 12px;">
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; font-size: .8rem;">
+                            <span style="background: var(--accent-bg); color: var(--accent); padding: 8px 16px; border-radius: 8px; font-weight: 600;">UAV Oblique Photogrammetry</span>
+                            <span style="color: var(--text-muted);">→</span>
+                            <span style="background: var(--accent-bg); color: var(--accent); padding: 8px 16px; border-radius: 8px; font-weight: 600;">Geo-Prior Enhancement</span>
+                            <span style="color: var(--text-muted);">→</span>
+                            <span style="background: var(--accent-bg); color: var(--accent); padding: 8px 16px; border-radius: 8px; font-weight: 600;">Weighted Sampling</span>
+                            <span style="color: var(--text-muted);">→</span>
+                            <span style="background: var(--accent-bg); color: var(--accent); padding: 8px 16px; border-radius: 8px; font-weight: 600;">SedCSA-Net</span>
+                            <span style="color: var(--text-muted);">→</span>
+                            <span style="background: var(--accent-bg); color: var(--accent); padding: 8px 16px; border-radius: 8px; font-weight: 600;">Attitude Extraction</span>
+                        </div>
+                    </div>
+                    <p style="font-size: .9rem; color: var(--text-soft);">
+                        The framework integrates <strong>UAV oblique photogrammetry</strong> acquisition,
+                        <strong>geological prior feature enhancement</strong> (surface normals, curvature, roughness, color gradients),
+                        <strong>weighted random sampling</strong> for class imbalance,
+                        <strong>SedCSA-Net</strong> with cross-scale self-attention, hybrid loss optimization,
+                        and automatic <strong>bedding-attitude measurement</strong> from segmentation results.
+                        The four collaborative improvements over PointNet++ are:
+                    </p>
+                    <ol style="font-size: .9rem; color: var(--text-soft); margin-top: 8px; padding-left: 20px;">
+                        <li><strong>Data augmentation:</strong> Geological prior features encoded as learnable input</li>
+                        <li><strong>Sampling strategy:</strong> Rare-class-aware weighted random sampling</li>
+                        <li><strong>Feature encoding:</strong> Cross-scale self-attention (CSA) over multi-scale groupings</li>
+                        <li><strong>Loss optimization:</strong> Hybrid loss combining Dice, Focal, and Cross-Entropy terms</li>
+                    </ol>
+                </div>
+
+                <div class="detail-section">
                     <h4>Key Results</h4>
                     <div class="pub-metrics">
                         <div class="metric">
@@ -554,6 +637,150 @@
                             <div class="label">Attitude Deviation</div>
                         </div>
                     </div>
+                </div>
+
+                <div class="detail-section">
+                    <h4>Ablation Study</h4>
+                    <p style="margin-bottom: 12px; font-size: .9rem; color: var(--text-soft);">
+                        Sequential ablation of the four proposed modules on the PointNet++ baseline.
+                        Each module contributes synergistic improvements to the overall performance.
+                    </p>
+                    <div class="data-table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Geo-Prior</th>
+                                    <th>Sampling</th>
+                                    <th>CSA</th>
+                                    <th>Hybrid Loss</th>
+                                    <th>mIoU</th>
+                                    <th>OA</th>
+                                    <th>IoU-Outcrop</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td></td><td></td><td></td><td></td>
+                                    <td>82.91</td><td>89.50</td><td>75.69</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td class="check">✓</td><td></td><td></td><td></td>
+                                    <td>84.47</td><td>90.82</td><td>78.63</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td class="check">✓</td><td class="check">✓</td><td></td><td></td>
+                                    <td>85.60</td><td>92.16</td><td>82.55</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td>
+                                    <td>88.21</td><td>95.02</td><td>84.94</td>
+                                </tr>
+                                <tr style="font-weight: 600;">
+                                    <td>5</td>
+                                    <td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td>
+                                    <td style="color: var(--accent); font-weight: 700;">89.51</td>
+                                    <td style="color: var(--accent); font-weight: 700;">96.08</td>
+                                    <td style="color: var(--accent); font-weight: 700;">86.90</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h4>Comparison with Baselines</h4>
+                    <p style="margin-bottom: 12px; font-size: .9rem; color: var(--text-soft);">
+                        SedCSA-Net compared against clustering (DBSCAN), classic ML (Random Forest),
+                        and deep learning baselines (PointNet, PointNet++).
+                    </p>
+                    <div class="data-table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Method</th>
+                                    <th>mIoU</th>
+                                    <th>IoU-Outcrop</th>
+                                    <th>IoU-Vegetation</th>
+                                    <th>IoU-Soil</th>
+                                    <th>OA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>DBSCAN</td><td>37.37</td><td>15.73</td><td>31.31</td><td>65.07</td><td>69.53</td></tr>
+                                <tr><td>Random Forest</td><td>63.77</td><td>19.48</td><td>87.75</td><td>84.07</td><td>88.21</td></tr>
+                                <tr><td>PointNet</td><td>38.86</td><td>25.81</td><td>28.10</td><td>62.66</td><td>66.11</td></tr>
+                                <tr><td>PointNet++</td><td>82.91</td><td>75.69</td><td>85.58</td><td>87.45</td><td>89.50</td></tr>
+                                <tr style="font-weight: 700; background: var(--accent-bg);">
+                                    <td style="color: var(--accent);">SedCSA-Net</td>
+                                    <td style="color: var(--accent);">89.51</td>
+                                    <td style="color: var(--accent);">86.90</td>
+                                    <td style="color: var(--accent);">89.69</td>
+                                    <td style="color: var(--accent);">91.95</td>
+                                    <td style="color: var(--accent);">96.08</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr><td colspan="6" class="caption">Best results in bold. SedCSA-Net outperforms all baselines across every metric.</td></tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h4>Geological Validation — Attitude Measurements</h4>
+                    <p style="margin-bottom: 12px; font-size: .9rem; color: var(--text-soft);">
+                        Dip direction (°) and dip angle (°) of fitted sedimentary layer boundaries,
+                        comparing SedCSA-Net segmentation results with manually annotated ground truth.
+                    </p>
+                    <div class="data-table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">Point</th>
+                                    <th colspan="2">Ground Truth</th>
+                                    <th colspan="2">SedCSA-Net</th>
+                                </tr>
+                                <tr>
+                                    <th>Dip Dir.</th><th>Dip Ang.</th>
+                                    <th>Dip Dir.</th><th>Dip Ang.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>21.23</td><td>32.37</td><td>19.54</td><td>31.74</td></tr>
+                                <tr><td>2</td><td>12.46</td><td>29.73</td><td>11.67</td><td>30.34</td></tr>
+                                <tr><td>3</td><td>23.60</td><td>31.94</td><td>21.75</td><td>30.64</td></tr>
+                                <tr><td>4</td><td>22.67</td><td>33.56</td><td>24.77</td><td>33.10</td></tr>
+                            </tbody>
+                            <tfoot>
+                                <tr><td colspan="5" class="caption">Deviation &lt;3° in both dip direction and dip angle across all measurement points.</td></tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h4>Conclusions &amp; Future Work</h4>
+                    <p style="font-size: .9rem; color: var(--text-soft);">
+                        This study presents an end-to-end intelligent interpretation framework for kilometer-scale
+                        sedimentary outcrop point-cloud interpretation from UAV oblique photogrammetry data.
+                        The framework integrates data acquisition, geological prior enhancement, rare-class-aware
+                        sampling, cross-scale self-attention encoding, hybrid-loss optimization, and automatic
+                        attitude measurement into a unified pipeline.
+                    </p>
+                    <p style="font-size: .9rem; color: var(--text-soft); margin-top: 8px;">
+                        <strong>Future directions:</strong>
+                    </p>
+                    <ul style="font-size: .9rem; color: var(--text-soft);">
+                        <li><strong>Cross-region generalization:</strong> Extend to Junggar, Tarim, and Sichuan basins with diverse lithologies</li>
+                        <li><strong>Multi-source data fusion:</strong> Incorporate multispectral/hyperspectral, LiDAR, and DEM data</li>
+                        <li><strong>Fine-grained recognition:</strong> Introduce lithofacies subclass labels and structural elements</li>
+                        <li><strong>Advanced benchmarking:</strong> Evaluate against more recent point-cloud architectures</li>
+                    </ul>
                 </div>
 
                 <div class="detail-section">
